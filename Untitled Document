@@ -1,0 +1,87 @@
+import cv2
+import random
+
+img=cv2.imread("Road.png")
+num,veh=0,0
+veh_arr=[]
+veh_col=[]
+destination=[]
+path=[]
+time=100
+speed=random.randint(2,10)
+delay=20
+dens=7
+end_steps=time*1000/delay
+start_possibles=[(0,225),(275,0),(500,275),(225,500)]
+end_possibles=[(0,275),(225,0),(500,225),(275,500)]
+while(True):
+	temp=cv2.imread("Road.png")
+	num+=1
+	if (num==end_steps):
+		break
+	if (num%dens==0):
+		rand1, rand2, rand3, rand4,rand5,rand6,rand7,rand8 =random.choice(start_possibles),random.choice(start_possibles),random.choice(start_possibles),random.choice(start_possibles),random.choice(end_possibles),random.choice(end_possibles),random.choice(end_possibles),random.choice(end_possibles)
+		
+		veh_arr.extend(list(set([rand1,rand2,rand3,rand4])))
+		#veh_arr=list(set(veh_arr))
+		dest_poss,ind=[rand5,rand6,rand7,rand8],0
+		for each in list(set([rand1,rand2,rand3,rand4])):
+			destination.append(dest_poss[ind])
+			veh_col.append(random.choice([0,0,0,0,0,0,0,0,0,0,0,1,0,0,0,0,0,1]))
+			ind=ind+1
+			path.append(0)
+
+	for each in veh_arr:
+		if veh_col[veh_arr.index(each)]==0:
+			cv2.circle(temp, each,3,(00,200,00),2,3)
+		else:
+			cv2.circle(temp, each,3,(00,00,200),2,3)
+	cv2.imshow("hello",temp)
+	cv2.waitKey(delay)
+	for each in veh_arr:
+		t1,t2=0,0
+		if path[veh_arr.index(each)] == 0:
+			if each[0]<215:
+				t1=each[0]+speed
+				t2=each[1]
+			elif (each[0])>285:
+				t1=each[0]-speed
+				t2=each[1]	
+			elif each[1]<215:
+				t2=each[1]+speed
+				t1=each[0]
+			elif (each[1])>285:
+				t2=each[1]-speed
+				t1=each[0]	
+			else:
+				path[veh_arr.index(each)]=1
+				if(destination[veh_arr.index(each)][1]==225):
+					t1,t2=each[0],225
+				elif (destination[veh_arr.index(each)][1]==275):
+					t1,t2=each[0],275
+				elif(destination[veh_arr.index(each)][0]==225):
+					t2,t1=each[1],225
+				elif (destination[veh_arr.index(each)][0]==275):
+					t2,t1=each[1],275	
+		else:	
+			if (destination[veh_arr.index(each)][1]==225):
+				t1=each[0]+speed
+				t2=each[1]
+			elif (destination[veh_arr.index(each)][1]==275):
+				t1=each[0]-speed
+				t2=each[1]	
+			elif (destination[veh_arr.index(each)][0]==225):
+				t2=each[1]-speed
+				t1=each[0]
+			elif (destination[veh_arr.index(each)][0]==275):
+				t2=each[1]+speed
+				t1=each[0]			
+		veh_arr.insert(veh_arr.index(each)+1,(t1,t2))
+		veh_arr.pop(veh_arr.index(each))
+
+
+
+print veh_arr
+print destination
+print path
+cv2.destroyAllWindows
