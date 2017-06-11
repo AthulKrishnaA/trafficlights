@@ -2,6 +2,7 @@ import cv2
 import random
 
 img=cv2.imread("Road.png")
+
 num,veh=0,0
 veh_arr=[]
 veh_col=[]
@@ -9,11 +10,14 @@ destination=[]
 path=[]
 time=100
 speed=random.randint(2,10)
-delay=20
+delay=25
 dens=7
 end_steps=time*1000/delay
+
 start_possibles=[(0,225),(275,0),(500,275),(225,500)]
 end_possibles=[(0,275),(225,0),(500,225),(275,500)]
+
+
 while(True):
 	temp=cv2.imread("Road.png")
 	num+=1
@@ -32,6 +36,12 @@ while(True):
 			path.append(0)
 
 	for each in veh_arr:
+		if each[0]<0 or each[0]>500 or each[1]<0 or each[1]>500:
+			path.pop(veh_arr.index(each))
+			destination.pop(veh_arr.index(each))
+			veh_col.pop(veh_arr.index(each))
+			veh_arr.remove(each)
+			continue
 		if veh_col[veh_arr.index(each)]==0:
 			cv2.circle(temp, each,3,(00,200,00),2,3)
 		else:
